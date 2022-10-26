@@ -1,5 +1,5 @@
 import React from 'react';
-import '../stylesheets/MatchesItem.css';
+// import '../stylesheets/MatchesItem.css';
 
 const MatchesItem = (props) => {
   // The way each user profile will look in the feed

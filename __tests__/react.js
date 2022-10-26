@@ -5,7 +5,7 @@ import MatchesItem from '../client/components/MatchesItem.js';
 import regeneratorRuntime from 'regenerator-runtime';
 
 describe('Unit testing React components', () => {
-    describe('FeedItem', () => {
+    xdescribe('FeedItem', () => {
         let item;
         const props = {
           username: 'Dennis',
@@ -53,9 +53,19 @@ describe('Unit testing React components', () => {
       item = render(<MatchesItem user={props}/>)
     });
 
-    test('Renders user detail to MatchesItem', () => {
-      const userDetail = item.getByText('')
+    test('Renders username to MatchesItem', () => {
+      const userName = item.getByRole('heading', {id: 'userName'});
+      expect(userName).toHaveTextContent(props.username);
+    });
+
+    test('Renders image url to MatchesItem', () => {
+      const image = item.getByRole('img', {'src': props.url});
+      expect(image).to
     })
+
+    // xtest('Renders user detail to MatchesItem', () => {
+    //   const userName 
+    // })
 
   });
   
