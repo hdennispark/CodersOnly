@@ -1,5 +1,5 @@
 import React from 'react';
-import '../stylesheets/FeedItem.css';
+// import '../stylesheets/FeedItem.css';
 
 const FeedItem = (props) => {
   //the way each user profile will look in the feed
