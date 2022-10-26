@@ -59,8 +59,8 @@ describe('Unit testing React components', () => {
     });
 
     test('Renders image url to MatchesItem', () => {
-      const image = item.getByRole('img', {'src': props.url});
-      expect(image).to
+      const image = item.getByRole('img');
+      expect(image).toHaveAttribute('src', props.url);
     })
 
     // xtest('Renders user detail to MatchesItem', () => {
