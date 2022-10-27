@@ -15,6 +15,10 @@ router.get('/friends', controller.getFriends, (req, res) => {
   return res.status(200).json(res.locals.friends);
 });
 
+router.get('/load', controller.loadChat, (req, res) => {
+  return res.status(200).json(res.locals.chatDetails);
+});
+
 router.get('/:username', controller.getUser, (req, res) => {
   // console.log('res.locals.users ' + res.locals.user);
   return res.status(201).json(res.locals.user);

@@ -1,20 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import SendMessage from './components/SendMessage'
 
 const Chat = (props) => {
-    fetch('/api/chat/${props.user}/${props.matchUser}')
-        .then((data) => {
-            return data.json();
-        })
-        .then((data) => {
-            messages = [];
-            data.forEach((element) => {
-                if (element.sender === props.user) {
-                    messages.push(<SentMessage/>)
-                } else {
-                    messages.push(<ReceivedMessage/>)
-                }
-            })
-        })
     return (
         <div>
             <h1 className='chat'>Chat</h1>
@@ -28,7 +15,7 @@ const Chat = (props) => {
 }
 
 
-
+export default Chat;
 
 
 //when user clicks, socket event is emitted to backend
