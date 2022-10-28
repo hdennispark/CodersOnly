@@ -20,7 +20,7 @@ mongoose.connect(
 
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:8080',
     methods: ['GET', 'POST'],
   },
 });
@@ -31,12 +31,14 @@ let allUsers = [];
 
 // Listen for when the client connects via socket.io-client
 io.on('connection', (socket) => {
-  console.log(`User connected ${socket.id}`);
+  // console.log(`line 34 in serverjs: User connected ${socket.id}`);
 
   // Add this
   // Add a user to a room
-  socket.on('join_room', (data) => {
-    const { username, room } = data; // Data sent from client when join_room event emitted
+  socket.on('join', async (data) => {
+    const { username, room } = await data; // Data sent from client when join_room event emitted
+    console.log('user: ', username);
+    console.log('room: ', room);
     socket.join(room); // Join the user to a socket room
 
     let __createtime__ = Date.now(); // current timestamp
@@ -51,27 +53,38 @@ io.on('connection', (socket) => {
     chatRoom = room;
     allUsers.push({ id: socket.id, username, room });
     chatRoomUsers = allUsers.filter((user) => user.room === room);
-    socket.to(room).emit('chatroom_users', chatRoomUsers);
+    socket.broadcast.emit('chatroom_users', chatRoomUsers);
     socket.emit('chatroom_users', chatRoomUsers);
   });
 
-  socket.on('send_message', (data) => {
-    const { message, username, room, __createdtime__ } = data;
-    io.in(room).emit('receive_message', data); // Send to all users in room, including sender
+  // io.in('test').emit('message', 'cool game'); //sending to all clients in 'game' room(channel), include sender
+  
+  // socket.on('load', async (data) => {
+  //   const { message, username, room, __createdtime__} = data;
+  //   const chatDetails = await Noodle.find({room: 'present'});
+  //   io.to(room).emit('load', chatDetails);
+  //   console.log('finished loading')
+  // })
 
-    const messageNoodle = new Noodle.create({
+
+  socket.on('send_message', async (data) => {
+    const { message, username, room, __createdtime__ } = await data;
+    io.to(room).emit('receive_message', data); // Send to all users in room, including sender
+    // console.log(`line 61 in server.js `, data.message)
+    const messageNoodle = Noodle.create({
       message,
       username,
       room,
       __createdtime__,
     })
+
       // harperSaveMessage(message, username, room, __createdtime__) // Save messagne in db
-      .then((response) => console.log(response))
+      .then((response) => console.log(`line 69 response `, response))
       .catch((err) => console.log(err));
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected from the chat');
+    // console.log('User disconnected from the chat');
     const user = allUsers.find((user) => user.id == socket.id);
     if (user?.username) {
       allUsers = leaveRoom(socket.id, allUsers);
@@ -82,6 +95,12 @@ io.on('connection', (socket) => {
     }
   });
 });
+
+
+
+
+
+
 
 server.listen(3000, () => 'Server is running on port 3000');
 
@@ -94,33 +113,12 @@ app.use((err, req, res, next) => {
     message: { err: 'An error occurred' },
   };
   const errorObj = Object.assign({}, defaultErr, err);
-  console.log(errorObj.log);
+  // console.log(errorObj.log); 
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-// http.listen(port, () => {
-//   console.log(`listening on port ${port}`);
-// });
+
 
 module.exports = app;
 
-// const http = require('http').createServer(app);
-// const socketio = require('socket.io');
 
-// const io = socketio(http, {
-//   cors: {
-//     origin: 'http://localhost:8080', // your frontend server address
-//     methods: ['GET', 'POST'],
-//   },
-// });
-// app.listen(port, () => console.log(`Server started on port ${port}`));
-// const httpServer = app.listen(port, () => {console.log(`Server listening on port ${port}`)});
-// io.on('connection', function (socket) {
-//   console.log(socket.id);
-// });
-// io.on('connection', (socket) => {
-//   console.log('a user connected');
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected');
-//   });
-// });

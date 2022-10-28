@@ -2,23 +2,19 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const noodleSchema = new Schema({
-    username: [
-            {
-              sender: [Schema.Types.ObjectId],
-              message: { type: String, required: true },
-            },
-          ],
+  message: {
+    type: String,
+    required: true
+  },
+  username: {type: String, required: true},
+  room: {
+    type: String,
+    required: true
+  },
+  __createdtime__: {type: Date},
     
 }, { timestamps: true })
 
-// const chatSchemaNoodle = mongoose.Schema({
-//   username: [
-//     {
-//       sender: username,
-//       message: { type: String, required: true },
-//     },
-//   ],
-// });
 
 const Noodle = mongoose.model('noodle', noodleSchema);
 module.exports = Noodle;

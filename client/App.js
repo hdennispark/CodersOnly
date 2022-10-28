@@ -6,6 +6,7 @@ import Profile from './Profile';
 import Feed from './Feed';
 import UpdateProfile from './components/UpdateProfile';
 import Matches from './Matches';
+import Messages from './components/Messages'
 //imported stylesheet
 import './stylesheets/style.css';
 
@@ -17,11 +18,7 @@ const App = () => {
   const [allUsers, setAllUsers] = useState([]);
   const [chat, setChat] = useState({ user: null });
 
-//   var socket = io.connect();
-// console.log('check 1', socket.connected);
-// socket.on('connect', function() {
-//   console.log('check 2', socket.connected);
-// });
+
 
   useEffect(() => {
     fetch('/api/friends')
@@ -30,6 +27,9 @@ const App = () => {
         setAllUsers(data);
       });
   }, []);
+
+
+console.log(currUser)
 
   return (
     <Routes>
@@ -52,10 +52,10 @@ const App = () => {
           />}
       />
       <Route
-        path='/Chat'
-        element={<Chat 
+        path='/Messages'
+        element={<Messages 
           currUser={currUser} 
-          room={chat.user} 
+          room='present'
           socket={socket}
           />}
       />

@@ -1,6 +1,26 @@
 const User = require('./userModel');
+const Noodle = require('./noodleModel.js')
 
 const controller = {};
+
+
+
+controller.loadChat = async (req, res, next) => {
+try {
+  const chatDetails = await Noodle.find({room: 'presentation'});
+  // console.log(`in the controller chatDetails controller `, chatDetails);
+  res.locals.chatDetails = chatDetails;
+  // console.log('finished loading')
+  return next();
+} catch (err) { return next({
+  log: `controller.js: ERROR: ${err}`,
+  status: 400,
+  message: {
+    err: 'An error occurred in controller.loadChat. Check server logs for more details',
+  },
+})}
+};
+
 
 controller.createUser = async (req, res, next) => {
   try {
@@ -41,7 +61,7 @@ controller.createUser = async (req, res, next) => {
 // change functionality to be for all instances of matches with value of not 'no' (or 'yes' and null)
 controller.getUser = async (req, res, next) => {
   try {
-    console.log('ID controller getUser', req.params);
+    // console.log('ID controller getUser', req.params);
     const { username } = req.params;
     res.locals.user = await User.findOne({ username }).exec();
     return next();
