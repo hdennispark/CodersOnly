@@ -6,14 +6,19 @@ import Profile from './Profile';
 import Feed from './Feed';
 import UpdateProfile from './components/UpdateProfile';
 import Matches from './Matches';
-
+import Messages from './components/Messages'
 //imported stylesheet
 import './stylesheets/style.css';
 
+import io from 'socket.io-client';
+const socket = io.connect('http://localhost:3000');
 //rendering profile here just for now before we add routers
 const App = () => {
   const [currUser, setCurrUser] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
+  const [chat, setChat] = useState({ user: null });
+
+
 
   useEffect(() => {
     fetch('/api/friends')
@@ -22,6 +27,9 @@ const App = () => {
         setAllUsers(data);
       });
   }, []);
+
+
+console.log(currUser)
 
   return (
     <Routes>
@@ -36,7 +44,20 @@ const App = () => {
       <Route path='/Profile' element={<Profile currUser={currUser} />} />
       <Route
         path='/Matches'
-        element={<Matches currUser={currUser} allUsers={allUsers} />}
+        element={<Matches 
+          currUser={currUser} 
+          allUsers={allUsers} 
+          setChat={setChat} 
+          socket={socket}
+          />}
+      />
+      <Route
+        path='/Messages'
+        element={<Messages 
+          currUser={currUser} 
+          room='present'
+          socket={socket}
+          />}
       />
     </Routes>
   );

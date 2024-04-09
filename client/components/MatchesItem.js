@@ -1,5 +1,6 @@
 import React from 'react';
-// import '../stylesheets/MatchesItem.css';
+import '../stylesheets/MatchesItem.css';
+import '../stylesheets/Messages.css';
 
 const MatchesItem = (props) => {
   // The way each user profile will look in the feed
@@ -17,7 +18,7 @@ const MatchesItem = (props) => {
       <p className='userDetail'>Location: {location}</p>
       <p className='userDetail'>Bio: {comment}</p>
       <p className='userDetail'>Programming Language: {proglang}</p>
-      <button>slideInto{username}DMs()</button>
+      <button className='slideDMbtn' onClick={() => props.slideDms(username)}>Slide into {username}'s DMs!</button>
     </div>
   );
 };
